@@ -1,5 +1,13 @@
 {
-    "TEXT_TO_SET": "Testing",
     "OUTPUT_PATH": "res\\output",
-    "OUTPUT_PAGE_FILE": "current_page.html"
+    "LATAM_OUTPUT_FILENAME": "latam.json",
+    "COPA_OUTPUT_FILENAME": "copa.json",
+    "LATAM_START_DATE": "2026-05-15",
+    "LATAM_END_DATE": "2026-06-05",
+    "LATAM_ORIGIN": "MDE",
+    "LATAM_DESTINATION": "SCL",
+    "COPA_START_DATE": "2026-06-01",
+    "COPA_END_DATE": "2026-06-10",
+    "COPA_ORIGIN": "SCL",
+    "COPA_DESTINATION": "MDE"
 }

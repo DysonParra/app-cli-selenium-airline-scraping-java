@@ -1,5 +1,7 @@
 {
-    "navigationFilePath": "res\\navigation.json",
+    "navigationFilePathLatam": "res\\navigation_latam.json",
+    "navigationFilePathCopa": "res\\navigation_copa.json",
+    "navigationFilePath": "res\\navigation_latam.json",
     "dataFilePath": "res\\data.json",
     "chromeDriverPath": "res\\chromedriver.exe",
     "chromeUserDataDir": "C:\\Users\\Developer\\AppData\\Local\\Google\\Chrome\\User Data Selenium",

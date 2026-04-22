@@ -1,0 +1,74 @@
+{
+    "config": {
+        "only-validate-config-files": false,
+        "delay-time-before-retry": 10000,
+        "delay-time-before-end": 3000,
+        "max-action-page-tries": 5
+    },
+    "navigation": [
+        {
+            "type": "navigation-range-date",
+            "start": "<COPA_START_DATE>",
+            "end": "<COPA_END_DATE>",
+            "days-loop": 7,
+            "navigation": [
+                {
+                    "type": "page",
+                    "url": "https://shopping.copaair.com/?roundtrip=false&adults=1&advanced_air_search=false&sf=co&langid=es&area1=<COPA_ORIGIN>&area2=<COPA_DESTINATION>&date1=<COPA_START_DATE>",
+                    "delay-time-before-next": 100,
+                    "elements": [
+                        {
+                            "type": "dom-element",
+                            "process-as-list": false,
+                            "id": null,
+                            "name": null,
+                            "xpath": "//body",
+                            "actions": [
+                                {
+                                    "type": "wait-page-load",
+                                    "timeout": 30000,
+                                    "delay-time-before-next": 500
+                                },
+                                {
+                                    "type": "wait-element-exist",
+                                    "timeout": 5000,
+                                    "element-xpath": "//button[contains(@data-cy, 'slider3x3-option')]",
+                                    "delay-time-before-next": 100
+                                }
+                            ]
+                        },
+                        {
+                            "type": "dom-element",
+                            "process-as-list": true,
+                            "id": null,
+                            "name": null,
+                            "xpath": "//button[contains(@data-cy, 'slider3x3-option')]",
+                            "actions": [
+                                {
+                                    "type": "script",
+                                    "script": [
+                                        "const retDate = new Date().toISOString();",
+                                        "var date = arguments[0].querySelector('span').textContent.split(', ')[1].replace(' · desde', '').split(' ');",
+                                        "const months = { Ene: '01', Feb: '02', Mar: '03', Abr: '04', May: '05', Jun: '06', Jul: '07', Ago: '08', Sep: '09', Oct: '10', Nov: '11', Dic: '12'};",
+                                        "var month = month = months[date[0]];",
+                                        "var day = date[1].padStart(2, '0');",
+                                        "var price = arguments[0].querySelector('p').textContent.replace(' COP', '');",
+                                        "return `{ \"airline\": \"copa\", \"price\": \"${price}\", \"date\": \"%navRangeYear%-${month}-${day}\", \"retrieved\": \"${retDate}\" }`;"
+                                    ],
+                                    "delay-time-before-next": 100
+                                },
+                                {
+                                    "type": "save-text-to-file",
+                                    "text": "%lastScriptResult%\n",
+                                    "output-path": "<OUTPUT_PATH>",
+                                    "output-file-name": "<COPA_OUTPUT_FILENAME>",
+                                    "delay-time-before-next": 100
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

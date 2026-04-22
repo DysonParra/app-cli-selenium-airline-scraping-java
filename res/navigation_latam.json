@@ -1,0 +1,111 @@
+{
+    "config": {
+        "only-validate-config-files": false,
+        "delay-time-before-retry": 10000,
+        "delay-time-before-end": 3000,
+        "max-action-page-tries": 5
+    },
+    "navigation": [
+        {
+            "type": "page",
+            "url": "https://www.latamairlines.com/co/es/ofertas-vuelos?adt=1&inf=0&cabin=Economy&sort=PRICE%2Casc&origin=<LATAM_ORIGIN>&destination=<LATAM_DESTINATION>&outbound=<LATAM_START_DATE>",
+            "delay-time-before-next": 100,
+            "elements": [
+                {
+                    "type": "element-range-date",
+                    "start": "<LATAM_START_DATE>",
+                    "end": "<LATAM_END_DATE>",
+                    "days-loop": 1,
+                    "elements": [
+                        {
+                            "type": "dom-element",
+                            "process-as-list": false,
+                            "id": null,
+                            "name": null,
+                            "xpath": "//body",
+                            "actions": [
+                                {
+                                    "type": "wait-page-load",
+                                    "timeout": 30000,
+                                    "delay-time-before-next": 500
+                                },
+                                {
+                                    "type": "wait-element-exist",
+                                    "timeout": 5000,
+                                    "element-xpath": "//button[@data-testid='DateCarouselItem']//span[text()='%elmRangeDay%/%elmRangeMonth%']",
+                                    "delay-time-before-next": 100
+                                },
+                                {
+                                    "type": "wait-element-exist",
+                                    "timeout": 5000,
+                                    "element-xpath": "//div[@aria-controls='brand-offers-section-0']",
+                                    "delay-time-before-next": 500
+                                }
+                            ]
+                        },
+                        {
+                            "type": "dom-element",
+                            "process-as-list": false,
+                            "id": null,
+                            "name": null,
+                            "xpath": "//div[@aria-controls='brand-offers-section-0']//div[@data-testid='footer-card-0']//span[@font-weight='bold']",
+                            "actions": [
+                                {
+                                    "type": "script",
+                                    "script": [
+                                        "const retDate = new Date().toISOString();",
+                                        "var price = arguments[0].textContent.replace('cop', '').replace(' ', '');",
+                                        "return `{ \"airline\": \"latam\", \"price\": \"${price}\", \"date\": \"%elmRangeValue%\", \"retrieved\": \"${retDate}\" }`;"
+                                    ],
+                                    "delay-time-before-next": 100
+                                },
+                                {
+                                    "type": "save-text-to-file",
+                                    "text": "%lastScriptResult%\n",
+                                    "output-path": "<OUTPUT_PATH>",
+                                    "output-file-name": "<LATAM_OUTPUT_FILENAME>",
+                                    "delay-time-before-next": 100
+                                }
+                            ]
+                        },
+                        {
+                            "type": "dom-element",
+                            "process-as-list": false,
+                            "id": null,
+                            "name": null,
+                            "xpath": "//button[@data-testid='DateCarouselItem' and @id='date-carousel-item-4']",
+                            "actions": [
+                                {
+                                    "type": "clic",
+                                    "delay-time-before-next": 100
+                                },
+                                {
+                                    "type": "wait-element-exist",
+                                    "timeout": 5000,
+                                    "element-xpath": "//button[@data-testid='DateCarouselItem' and @id='date-carousel-item-1']",
+                                    "delay-time-before-next": 100
+                                }
+                            ]
+                        },
+                        {
+                            "type": "dom-element",
+                            "process-as-list": false,
+                            "id": null,
+                            "name": null,
+                            "xpath": "//button[@data-testid='DateCarouselItem' and @id='date-carousel-item-1']",
+                            "actions": [
+                                {
+                                    "type": "wait-attribute-change",
+                                    "timeout": 5000,
+                                    "attribute": "aria-disabled",
+                                    "expected-value": "true",
+                                    "delay-time-before-next": 100
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
